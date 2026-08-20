@@ -258,4 +258,5 @@ CREATE SCHEMA IF NOT EXISTS sales_api.gold;
 
 # 👨‍💻 Autor
 
-**Rian**# databricks-medallion-lakehouse
+**Rian Freires Da Costa Silva**
+
