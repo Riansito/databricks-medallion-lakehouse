@@ -114,7 +114,6 @@ Entre os principais objetivos estão:
 databricks-sales-lakehouse/
 │
 ├── README.md
-├── architecture_diagram.png
 │
 └── src/
     ├── bronze/
