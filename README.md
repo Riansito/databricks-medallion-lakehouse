@@ -190,8 +190,8 @@ O processamento da camada Silver realiza:
 * declaração e execução via PySpark e **Delta Live Tables (DLT)**
 
 O processamento da camada Silver é executado via **Delta Live Tables (DLT)** e PySpark para desaninhar arrays, aplicar regras de negócio, limpar schemas e construir as tabelas Fato e Dimensão.
-<img width="1654" height="836" alt="Captura de tela 2026-08-20 122646" src="https://github.com/user-attachments/assets/c4b13204-7085-4a68-ac9b-5208d1436408" />
 
+<img width="1654" height="836" alt="Captura de tela 2026-08-20 122646" src="https://github.com/user-attachments/assets/343edde1-3416-40b5-bb12-dc4cbc034790" />
 
 ---
 
@@ -216,7 +216,7 @@ O pipeline completo é gerenciado por um Job no **Databricks Workflows** com 3 t
 2. **Task 2 (Silver DLT Pipeline):** Dispara a atualização declarativa do pipeline Delta Live Tables para atualização das tabelas Silver. *(Depende da Task 1)*
 3. **Task 3 (Gold Consolidation):** Executa o notebook PySpark para consolidar os joins e publicar a view Gold no Unity Catalog. *(Depende da Task 2)*
 
-<img width="1627" height="837" alt="Captura de tela 2026-08-20 122602" src="https://github.com/user-attachments/assets/515a72a3-53d9-4612-a5d2-3154cb05fda9" />
+<img width="1627" height="837" alt="Captura de tela 2026-08-20 122602" src="https://github.com/user-attachments/assets/b8c73b5a-7570-4185-95a2-1feb4c42f611" />
 
 ---
 
