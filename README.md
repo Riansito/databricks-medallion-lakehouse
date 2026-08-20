@@ -77,6 +77,8 @@ Entre os principais objetivos estão:
               Consumo BI / Analytics
 
 ```
+## Ilustração da Arquitetura
+<img width="1672" height="941" alt="ChatGPT Image 20 de ago  de 2026, 12_11_48" src="https://github.com/user-attachments/assets/c2023e2b-9a6c-4173-84fd-885297bb2e21" />
 
 ---
 
