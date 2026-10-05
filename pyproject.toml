@@ -9,6 +9,7 @@ dependencies = [
     "pyspark",
     "pytest",
     "requests-mock",
+    "pydantic",
 ]
 
 [tool.pytest.ini_options]

@@ -5,6 +5,8 @@ import os
 
 import requests
 
+from bronze.schemas import CartSchema, ProductSchema, UserSchema
+
 url = os.getenv("API_BASE_URL", "https://dummyjson.com/")
 CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")
 endpoints = ["carts", "users", "products?limit=0"]
@@ -26,15 +28,17 @@ def extract_data(endpoints):
 
         if endpoint == "carts":
             transformed_data = [
-                {
-                    "id": cart["id"],
-                    "userId": cart["userId"],
-                    "total": cart["total"],
-                    "discountedTotal": cart["discountedTotal"],
-                    "totalProducts": cart["totalProducts"],
-                    "totalQuantity": cart["totalQuantity"],
-                    "products": cart["products"],
-                }
+                CartSchema(
+                    **{
+                        "id": cart["id"],
+                        "userId": cart["userId"],
+                        "total": cart["total"],
+                        "discountedTotal": cart["discountedTotal"],
+                        "totalProducts": cart["totalProducts"],
+                        "totalQuantity": cart["totalQuantity"],
+                        "products": cart["products"],
+                    }
+                ).model_dump()
                 for cart in json_data["carts"]
             ]
 
@@ -42,18 +46,20 @@ def extract_data(endpoints):
 
         elif endpoint == "users":
             transformed_data = [
-                {
-                    "id": user["id"],
-                    "firstName": user["firstName"],
-                    "lastName": user["lastName"],
-                    "age": user["age"],
-                    "gender": user["gender"],
-                    "email": user["email"],
-                    "city": user["address"]["city"],
-                    "state": user["address"]["state"],
-                    "country": user["address"]["country"],
-                    "role": user["role"],
-                }
+                UserSchema(
+                    **{
+                        "id": user["id"],
+                        "firstName": user["firstName"],
+                        "lastName": user["lastName"],
+                        "age": user["age"],
+                        "gender": user["gender"],
+                        "email": user["email"],
+                        "city": user["address"]["city"],
+                        "state": user["address"]["state"],
+                        "country": user["address"]["country"],
+                        "role": user["role"],
+                    }
+                ).model_dump()
                 for user in json_data["users"]
             ]
 
@@ -61,26 +67,30 @@ def extract_data(endpoints):
 
         elif endpoint == "products?limit=0":
             transformed_data = [
-                {
-                    "id": str(product.get("id")),
-                    "title": product.get("title"),
-                    "description": product.get("description"),
-                    "category": product.get("category"),
-                    "price": str(product.get("price")),
-                    "discountPercentage": str(product.get("discountPercentage")),
-                    "rating": str(product.get("rating")),
-                    "stock": str(product.get("stock")),
-                    "brand": (
-                        str(product.get("brand"))
-                        if product.get("brand") is not None
-                        else None
-                    ),
-                    "sku": product.get("sku"),
-                    "weight": str(product.get("weight")),
-                    "availabilityStatus": product.get("availabilityStatus"),
-                    "returnPolicy": product.get("returnPolicy"),
-                    "minimumOrderQuantity": str(product.get("minimumOrderQuantity")),
-                }
+                ProductSchema(
+                    **{
+                        "id": str(product.get("id")),
+                        "title": product.get("title"),
+                        "description": product.get("description"),
+                        "category": product.get("category"),
+                        "price": str(product.get("price")),
+                        "discountPercentage": str(product.get("discountPercentage")),
+                        "rating": str(product.get("rating")),
+                        "stock": str(product.get("stock")),
+                        "brand": (
+                            str(product.get("brand"))
+                            if product.get("brand") is not None
+                            else None
+                        ),
+                        "sku": product.get("sku"),
+                        "weight": str(product.get("weight")),
+                        "availabilityStatus": product.get("availabilityStatus"),
+                        "returnPolicy": product.get("returnPolicy"),
+                        "minimumOrderQuantity": str(
+                            product.get("minimumOrderQuantity")
+                        ),
+                    }
+                ).model_dump()
                 for product in json_data["products"]
             ]
 
