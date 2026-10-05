@@ -43,6 +43,9 @@ Entre os principais objetivos estão:
 * Modelar um esquema dimensional completo (Fatos e Dimensões)
 * Consolidar os dados na camada Gold através de visões prontas para inteligência de negócio
 * Orquestrar todas as etapas de forma dependente e automática via Databricks Workflows (Jobs)
+* Garantir a conformidade dos dados com validações dinâmicas via **Pydantic**
+* Garantir a qualidade do código com **Testes Unitários e Mocks (Pytest)** integrados
+* Automatizar linting, formatação e testes usando integração contínua (CI) com **GitHub Actions**
 
 ---
 
@@ -103,8 +106,17 @@ Entre os principais objetivos estão:
 
 ### Bibliotecas Python
 
-* Requests
+* Requests (Ingestão de APIs)
 * PySpark SQL (`functions`, `types`)
+* Pydantic (Validação e Schemas de Dados)
+* Pytest e requests-mock (Testes Unitários e Simulações)
+
+### Infraestrutura, CI/CD e Ferramentas
+
+* uv (Gerenciador de Dependências ultrarrápido)
+* Ruff (Linter e Formatador)
+* GitHub Actions (Pipeline de Integração Contínua)
+* Variáveis de Ambiente (`.env` e `config.py`)
 
 ---
 
@@ -117,7 +129,8 @@ databricks-sales-lakehouse/
 │
 └── src/
     ├── bronze/
-    │   └── 01_ingest_api_bronze.py
+    │   ├── ingest_api_bronze.py
+    │   └── schemas.py (Modelos de Validação Pydantic)
     │
     ├── silver/
     │   ├── 01_silver_fact_itens.py
@@ -128,6 +141,17 @@ databricks-sales-lakehouse/
     └── gold/
         └── 01_gold_vw_sales_details.py
 
+├── tests/
+│   ├── conftest.py (Fixtures PySpark e Mocks)
+│   ├── test_ingest_api_bronze.py
+│   ├── test_silver.py
+│   └── test_gold.py
+│
+├── .github/workflows/
+│   └── ci.yml (Pipeline do GitHub Actions)
+│
+├── pyproject.toml (Configuração uv/ruff/pytest)
+└── src/config.py (Gerenciamento de Variáveis de Ambiente)
 ```
 
 ---
@@ -243,6 +267,21 @@ CREATE SCHEMA IF NOT EXISTS sales_api.gold;
 1. Vá em **Workflows** $\rightarrow$ **Create Job**.
 2. Crie as 3 tarefas encadeadas conforme a estrutura descrita na seção de Orquestração.
 3. Clique em **Run Now** para disparar o pipeline completo de ponta a ponta.
+
+---
+
+# 🛡️ Boas Práticas e Qualidade de Software
+
+Este projeto implementa rigorosos padrões de engenharia de software para garantir escalabilidade e manutenção:
+
+1. **Gestão de Dependências**: Uso da ferramenta `uv` em conjunto com `pyproject.toml` para um controle rápido, reproduzível e isolado do ambiente virtual.
+2. **Qualidade de Código**: Código inspecionado, formatado e analisado pelo `ruff` (superando linting e auto-formatação tradicionais).
+3. **Parametrização**: Remoção de *hardcodings* (código fixo) usando o pacote `os` do Python para resgatar configurações vitais via variáveis de ambiente (ex: `CATALOG_NAME` e URLs baseadas no `.env.example`).
+4. **Validação de Contrato (Data Quality)**: Payload oriundo da API validado pela estrutura estrita do **Pydantic** antes de integrar ao *Delta Lake*, evitando inserção de valores ou tipos indesejados.
+5. **Testes (Test-Driven)**: Suíte focada desenvolvida via **Pytest**.
+   - Os testes da ingestão isolam a rede real usando o `requests_mock`.
+   - Os testes analíticos (Silver e Gold) rodam um **PySpark local (`local[1]`) via fixture** gerada para que o CI verifique `joins` e `selects` sem inflar recursos da nuvem.
+6. **Integração Contínua (CI)**: Um fluxo CI em **GitHub Actions** (`ci.yml`) configurado na branch `main` executa as validações do código (ruff) e de lógica (pytest) em toda abertura de *Pull Request* ou *Push*.
 
 ---
 
