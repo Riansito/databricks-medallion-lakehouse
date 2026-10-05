@@ -11,7 +11,7 @@ import dlt
 )
 def fact_sales():
     df = spark.read.table("sales_api.bronze.carts")
-    
+
     return df.select(
         "id",
         df["userId"].alias("id_client"),

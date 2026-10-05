@@ -1,6 +1,6 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
-from pyspark.sql.functions import col, concat, lit
+from pyspark.sql.functions import concat, lit
 
 # 1. Carregar tabelas da Silver geradas pelo DLT
 fact_sales = spark.read.table("sales_api.silver.fact_sales")

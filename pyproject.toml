@@ -1,0 +1,28 @@
+[project]
+name = "pipeline-databricks-lakehouse"
+version = "0.1.0"
+description = "Pipeline de Engenharia de Dados com Databricks e Delta Lake"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests",
+    "pyspark",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+]
+ignore = []
+builtins = ["spark", "dbutils", "display"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

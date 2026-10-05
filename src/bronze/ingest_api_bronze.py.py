@@ -10,7 +10,6 @@ endpoints = ["carts", "users", "products?limit=0"]
 # COMMAND ----------
 
 # DBTITLE 1,Cell 2
-import requests
 
 def extract_data(endpoints):
     data = {}
