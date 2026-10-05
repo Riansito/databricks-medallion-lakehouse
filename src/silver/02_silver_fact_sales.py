@@ -1,6 +1,7 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
 import os
+
 import dlt
 
 CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")
