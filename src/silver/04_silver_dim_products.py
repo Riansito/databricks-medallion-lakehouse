@@ -6,13 +6,10 @@ import dlt
 
 # DBTITLE 1,Cell 2
 
-@dlt.table(
-    name="dim_products",
-    comment="Tabela dimensão de produtos  - Camada Silver"
-)
+
+@dlt.table(name="dim_products", comment="Tabela dimensão de produtos  - Camada Silver")
 def dim_products():
     df = spark.read.table("sales_api.bronze.products")
-
 
     return df.select(
         df.id.cast("int"),
@@ -28,8 +25,9 @@ def dim_products():
         df.availabilityStatus,
         df.brand,
         df.sku,
-        df.minimumOrderQuantity.cast("int")
+        df.minimumOrderQuantity.cast("int"),
     )
+
 
 # COMMAND ----------
 
