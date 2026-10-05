@@ -28,5 +28,5 @@ jobs:
         run: uvx ruff check .
 
       # O passo de testes será ativado após o BACK-004
-      # - name: Test with pytest
-      #   run: uv run pytest tests/
+      - name: Test with pytest
+        run: uv run pytest tests/

@@ -101,6 +101,6 @@ def create_bronze_tables(data):
 
 # COMMAND ----------
 
-data = extract_data(endpoints)
-
-create_bronze_tables(data)
+if __name__ == "__main__":
+    data = extract_data(endpoints)
+    create_bronze_tables(data)
