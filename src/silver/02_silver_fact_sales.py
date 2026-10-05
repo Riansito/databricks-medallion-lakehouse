@@ -4,11 +4,9 @@ import dlt
 
 # COMMAND ----------
 
+
 # DBTITLE 1,Cell 2
-@dlt.table(
-    name="fact_sales",
-    comment="Tabela fato de vendas - Camada Silver"
-)
+@dlt.table(name="fact_sales", comment="Tabela fato de vendas - Camada Silver")
 def fact_sales():
     df = spark.read.table("sales_api.bronze.carts")
 
@@ -18,8 +16,8 @@ def fact_sales():
         "total",
         "discountedTotal",
         "totalProducts",
-        "totalQuantity"
+        "totalQuantity",
     )
 
-# COMMAND ----------
 
+# COMMAND ----------

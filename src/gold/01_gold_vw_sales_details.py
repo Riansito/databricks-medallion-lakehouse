@@ -8,16 +8,20 @@ fact_items_sales = spark.read.table("sales_api.silver.fact_itens")
 dim_users = spark.read.table("sales_api.silver.dim_users")
 dim_products = spark.read.table("sales_api.silver.dim_products")
 
+
 def vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products):
     return (
-        fact_items_sales
-        .join(fact_sales, fact_items_sales.id_sales == fact_sales.id, "inner")
+        fact_items_sales.join(
+            fact_sales, fact_items_sales.id_sales == fact_sales.id, "inner"
+        )
         .join(dim_users, fact_sales.id_client == dim_users.id, "inner")
         .join(dim_products, fact_items_sales.id_product == dim_products.id, "inner")
         .select(
             fact_sales.id.alias("id_sale"),
             fact_sales.id_client,
-            concat(dim_users.firstName, lit(" "), dim_users.lastName).alias("client_name"),
+            concat(dim_users.firstName, lit(" "), dim_users.lastName).alias(
+                "client_name"
+            ),
             dim_users.age.alias("client_age"),
             dim_users.gender.alias("client_gender"),
             dim_users.city.alias("client_city"),
@@ -31,18 +35,19 @@ def vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products):
             dim_products.price.cast("double").alias("unit_price"),
             fact_items_sales.quantity.cast("int").alias("quantity"),
             fact_items_sales.total.cast("double").alias("item_total"),
-            fact_items_sales.discountedTotal.cast("double").alias("item_discounted_total")
+            fact_items_sales.discountedTotal.cast("double").alias(
+                "item_discounted_total"
+            ),
         )
     )
+
 
 # 2. Executar e Salvar na Gold
 df_gold = vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products)
 
-df_gold.write \
-    .format("delta") \
-    .mode("overwrite") \
-    .option("overwriteSchema", "true") \
-    .saveAsTable("sales_api.gold.vw_sales_details")
+df_gold.write.format("delta").mode("overwrite").option(
+    "overwriteSchema", "true"
+).saveAsTable("sales_api.gold.vw_sales_details")
 
 
 # COMMAND ----------

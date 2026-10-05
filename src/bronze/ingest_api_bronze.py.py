@@ -11,18 +11,17 @@ endpoints = ["carts", "users", "products?limit=0"]
 
 # DBTITLE 1,Cell 2
 
+
 def extract_data(endpoints):
     data = {}
 
     for endpoint in endpoints:
-
         response = requests.get(url + endpoint)
         response.raise_for_status()
 
         json_data = response.json()
 
         if endpoint == "carts":
-
             transformed_data = [
                 {
                     "id": cart["id"],
@@ -31,7 +30,7 @@ def extract_data(endpoints):
                     "discountedTotal": cart["discountedTotal"],
                     "totalProducts": cart["totalProducts"],
                     "totalQuantity": cart["totalQuantity"],
-                    "products": cart["products"]
+                    "products": cart["products"],
                 }
                 for cart in json_data["carts"]
             ]
@@ -39,7 +38,6 @@ def extract_data(endpoints):
             data["carts"] = transformed_data
 
         elif endpoint == "users":
-
             transformed_data = [
                 {
                     "id": user["id"],
@@ -51,7 +49,7 @@ def extract_data(endpoints):
                     "city": user["address"]["city"],
                     "state": user["address"]["state"],
                     "country": user["address"]["country"],
-                    "role": user["role"]
+                    "role": user["role"],
                 }
                 for user in json_data["users"]
             ]
@@ -59,7 +57,6 @@ def extract_data(endpoints):
             data["users"] = transformed_data
 
         elif endpoint == "products?limit=0":
-
             transformed_data = [
                 {
                     "id": str(product.get("id")),
@@ -79,9 +76,7 @@ def extract_data(endpoints):
                     "weight": str(product.get("weight")),
                     "availabilityStatus": product.get("availabilityStatus"),
                     "returnPolicy": product.get("returnPolicy"),
-                    "minimumOrderQuantity": str(
-                        product.get("minimumOrderQuantity")
-                    )
+                    "minimumOrderQuantity": str(product.get("minimumOrderQuantity")),
                 }
                 for product in json_data["products"]
             ]
@@ -94,14 +89,11 @@ def extract_data(endpoints):
 def create_bronze_tables(data):
 
     for table_name, records in data.items():
-
         df = spark.createDataFrame(records)
 
-        df.write \
-            .format("delta") \
-            .mode("overwrite") \
-            .saveAsTable(f"sales_api.bronze.{table_name}")
-
+        df.write.format("delta").mode("overwrite").saveAsTable(
+            f"sales_api.bronze.{table_name}"
+        )
 
 
 # COMMAND ----------

@@ -5,19 +5,13 @@ from pyspark.sql.functions import explode, monotonically_increasing_id, round
 
 # COMMAND ----------
 
+
 # DBTITLE 1,Cell 2
-@dlt.table(
-    name="fact_itens",
-    comment="Tabela fato de itens de venda - Camada Silver"
-)
+@dlt.table(name="fact_itens", comment="Tabela fato de itens de venda - Camada Silver")
 def fact_itens():
     df = spark.read.table("sales_api.bronze.carts")
 
-    df_itens = df.select(
-        "id",
-        "userId",
-        explode("products").alias("produto")
-    )
+    df_itens = df.select("id", "userId", explode("products").alias("produto"))
 
     df_itens = df_itens.select(
         df_itens["id"].alias("id_sales"),
@@ -27,11 +21,10 @@ def fact_itens():
         df_itens["produto"]["quantity"].alias("quantity"),
         round(df_itens["produto"]["total"], 2).alias("total"),
         round(df_itens["produto"]["discountedTotal"], 2).alias("discountedTotal"),
-        round(df_itens["produto"]["discountPercentage"], 2).alias("discountPercentage")
+        round(df_itens["produto"]["discountPercentage"], 2).alias("discountPercentage"),
     ).withColumn("id", monotonically_increasing_id())
 
     return df_itens
 
 
 # COMMAND ----------
-
