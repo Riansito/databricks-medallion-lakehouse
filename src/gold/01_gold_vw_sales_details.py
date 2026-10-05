@@ -1,12 +1,15 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
+import os
 from pyspark.sql.functions import concat, lit
 
+CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")
+
 # 1. Carregar tabelas da Silver geradas pelo DLT
-fact_sales = spark.read.table("sales_api.silver.fact_sales")
-fact_items_sales = spark.read.table("sales_api.silver.fact_itens")
-dim_users = spark.read.table("sales_api.silver.dim_users")
-dim_products = spark.read.table("sales_api.silver.dim_products")
+fact_sales = spark.read.table(f"{CATALOG_NAME}.silver.fact_sales")
+fact_items_sales = spark.read.table(f"{CATALOG_NAME}.silver.fact_itens")
+dim_users = spark.read.table(f"{CATALOG_NAME}.silver.dim_users")
+dim_products = spark.read.table(f"{CATALOG_NAME}.silver.dim_products")
 
 
 def vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products):
@@ -47,7 +50,7 @@ df_gold = vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products
 
 df_gold.write.format("delta").mode("overwrite").option(
     "overwriteSchema", "true"
-).saveAsTable("sales_api.gold.vw_sales_details")
+).saveAsTable(f"{CATALOG_NAME}.gold.vw_sales_details")
 
 
 # COMMAND ----------
