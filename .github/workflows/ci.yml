@@ -1,0 +1,32 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Check formatting with Ruff
+        run: uvx ruff format --check .
+
+      - name: Lint with Ruff
+        run: uvx ruff check .
+
+      # O passo de testes será ativado após o BACK-004
+      # - name: Test with pytest
+      #   run: uv run pytest tests/
