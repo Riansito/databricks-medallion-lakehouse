@@ -32,7 +32,10 @@ def test_fact_sales(spark):
     ]
     mock_df = spark.createDataFrame(data, schema)
 
-    with patch("pyspark.sql.readwriter.DataFrameReader.table", return_value=mock_df):
+    from unittest.mock import PropertyMock
+
+    with patch("pyspark.sql.SparkSession.read", new_callable=PropertyMock) as mock_read:
+        mock_read.return_value.table.return_value = mock_df
         result_df = fact_sales()
 
         # Verify schema mapping and aliases
@@ -86,7 +89,10 @@ def test_fact_itens(spark):
 
     mock_df = spark.createDataFrame(data, schema)
 
-    with patch("pyspark.sql.readwriter.DataFrameReader.table", return_value=mock_df):
+    from unittest.mock import PropertyMock
+
+    with patch("pyspark.sql.SparkSession.read", new_callable=PropertyMock) as mock_read:
+        mock_read.return_value.table.return_value = mock_df
         result_df = fact_itens()
 
         assert "id_product" in result_df.columns
