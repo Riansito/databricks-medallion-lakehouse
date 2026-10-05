@@ -1,6 +1,7 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
 import os
+
 import dlt
 from pyspark.sql.functions import explode, monotonically_increasing_id, round
 

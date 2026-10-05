@@ -1,6 +1,7 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
 import os
+
 from pyspark.sql.functions import concat, lit
 
 CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")

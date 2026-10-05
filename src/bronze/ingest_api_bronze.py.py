@@ -2,6 +2,7 @@
 # DBTITLE 1,Cell 1
 
 import os
+
 import requests
 
 url = os.getenv("API_BASE_URL", "https://dummyjson.com/")
