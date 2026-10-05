@@ -6,12 +6,6 @@ from pyspark.sql.functions import concat, lit
 
 CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")
 
-# 1. Carregar tabelas da Silver geradas pelo DLT
-fact_sales = spark.read.table(f"{CATALOG_NAME}.silver.fact_sales")
-fact_items_sales = spark.read.table(f"{CATALOG_NAME}.silver.fact_itens")
-dim_users = spark.read.table(f"{CATALOG_NAME}.silver.dim_users")
-dim_products = spark.read.table(f"{CATALOG_NAME}.silver.dim_products")
-
 
 def vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products):
     return (
@@ -46,14 +40,20 @@ def vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products):
     )
 
 
-# 2. Executar e Salvar na Gold
-df_gold = vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products)
+if __name__ == "__main__":
+    # 1. Carregar tabelas da Silver geradas pelo DLT
+    fact_sales = spark.read.table(f"{CATALOG_NAME}.silver.fact_sales")
+    fact_items_sales = spark.read.table(f"{CATALOG_NAME}.silver.fact_itens")
+    dim_users = spark.read.table(f"{CATALOG_NAME}.silver.dim_users")
+    dim_products = spark.read.table(f"{CATALOG_NAME}.silver.dim_products")
 
-df_gold.write.format("delta").mode("overwrite").option(
-    "overwriteSchema", "true"
-).saveAsTable(f"{CATALOG_NAME}.gold.vw_sales_details")
+    # 2. Executar e Salvar na Gold
+    df_gold = vw_sales_details(fact_sales, fact_items_sales, dim_users, dim_products)
 
+    df_gold.write.format("delta").mode("overwrite").option(
+        "overwriteSchema", "true"
+    ).saveAsTable(f"{CATALOG_NAME}.gold.vw_sales_details")
 
-# COMMAND ----------
+    # COMMAND ----------
 
-display(df_gold)
+    display(df_gold)
