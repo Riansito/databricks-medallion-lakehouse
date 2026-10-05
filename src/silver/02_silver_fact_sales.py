@@ -1,6 +1,9 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
+import os
 import dlt
+
+CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")
 
 # COMMAND ----------
 
@@ -8,7 +11,7 @@ import dlt
 # DBTITLE 1,Cell 2
 @dlt.table(name="fact_sales", comment="Tabela fato de vendas - Camada Silver")
 def fact_sales():
-    df = spark.read.table("sales_api.bronze.carts")
+    df = spark.read.table(f"{CATALOG_NAME}.bronze.carts")
 
     return df.select(
         "id",

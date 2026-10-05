@@ -1,7 +1,10 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
+import os
 import dlt
 from pyspark.sql.functions import explode, monotonically_increasing_id, round
+
+CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")
 
 # COMMAND ----------
 
@@ -9,7 +12,7 @@ from pyspark.sql.functions import explode, monotonically_increasing_id, round
 # DBTITLE 1,Cell 2
 @dlt.table(name="fact_itens", comment="Tabela fato de itens de venda - Camada Silver")
 def fact_itens():
-    df = spark.read.table("sales_api.bronze.carts")
+    df = spark.read.table(f"{CATALOG_NAME}.bronze.carts")
 
     df_itens = df.select("id", "userId", explode("products").alias("produto"))
 

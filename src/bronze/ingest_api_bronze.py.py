@@ -1,9 +1,11 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
 
+import os
 import requests
 
-url = "https://dummyjson.com/"
+url = os.getenv("API_BASE_URL", "https://dummyjson.com/")
+CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")
 endpoints = ["carts", "users", "products?limit=0"]
 
 
@@ -92,7 +94,7 @@ def create_bronze_tables(data):
         df = spark.createDataFrame(records)
 
         df.write.format("delta").mode("overwrite").saveAsTable(
-            f"sales_api.bronze.{table_name}"
+            f"{CATALOG_NAME}.bronze.{table_name}"
         )
 
 

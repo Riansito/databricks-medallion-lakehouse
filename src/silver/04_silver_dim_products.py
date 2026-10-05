@@ -1,6 +1,9 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
+import os
 import dlt
+
+CATALOG_NAME = os.getenv("CATALOG_NAME", "sales_api")
 
 # COMMAND ----------
 
@@ -9,7 +12,7 @@ import dlt
 
 @dlt.table(name="dim_products", comment="Tabela dimensão de produtos  - Camada Silver")
 def dim_products():
-    df = spark.read.table("sales_api.bronze.products")
+    df = spark.read.table(f"{CATALOG_NAME}.bronze.products")
 
     return df.select(
         df.id.cast("int"),
