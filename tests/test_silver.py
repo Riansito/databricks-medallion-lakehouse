@@ -32,7 +32,7 @@ def test_fact_sales(spark):
     ]
     mock_df = spark.createDataFrame(data, schema)
 
-    with patch("builtins.spark.read.table", return_value=mock_df):
+    with patch("pyspark.sql.readwriter.DataFrameReader.table", return_value=mock_df):
         result_df = fact_sales()
 
         # Verify schema mapping and aliases
@@ -86,7 +86,7 @@ def test_fact_itens(spark):
 
     mock_df = spark.createDataFrame(data, schema)
 
-    with patch("builtins.spark.read.table", return_value=mock_df):
+    with patch("pyspark.sql.readwriter.DataFrameReader.table", return_value=mock_df):
         result_df = fact_itens()
 
         assert "id_product" in result_df.columns
