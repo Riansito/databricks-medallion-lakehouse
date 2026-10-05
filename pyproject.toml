@@ -7,7 +7,13 @@ requires-python = ">=3.10"
 dependencies = [
     "requests",
     "pyspark",
+    "pytest",
+    "requests-mock",
+    "pydantic",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
 
 [tool.ruff]
 builtins = ["spark", "dbutils", "display"]
