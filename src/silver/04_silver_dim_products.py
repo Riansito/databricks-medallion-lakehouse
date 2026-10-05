@@ -12,8 +12,8 @@ import dlt
 )
 def dim_products():
     df = spark.read.table("sales_api.bronze.products")
-    
-    
+
+
     return df.select(
         df.id.cast("int"),
         df.title,

@@ -1,7 +1,7 @@
 # Databricks notebook source
 # DBTITLE 1,Cell 1
 import dlt
-from pyspark.sql.functions import explode, round, monotonically_increasing_id
+from pyspark.sql.functions import explode, monotonically_increasing_id, round
 
 # COMMAND ----------
 
@@ -12,13 +12,13 @@ from pyspark.sql.functions import explode, round, monotonically_increasing_id
 )
 def fact_itens():
     df = spark.read.table("sales_api.bronze.carts")
-    
+
     df_itens = df.select(
         "id",
         "userId",
         explode("products").alias("produto")
     )
-    
+
     df_itens = df_itens.select(
         df_itens["id"].alias("id_sales"),
         df_itens["userId"].alias("id_client"),
@@ -29,7 +29,7 @@ def fact_itens():
         round(df_itens["produto"]["discountedTotal"], 2).alias("discountedTotal"),
         round(df_itens["produto"]["discountPercentage"], 2).alias("discountPercentage")
     ).withColumn("id", monotonically_increasing_id())
-    
+
     return df_itens
 
 

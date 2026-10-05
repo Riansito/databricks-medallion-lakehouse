@@ -3,6 +3,7 @@
 
 import dlt
 
+
 @dlt.table(
     name="dim_users",
     comment="Tabela dimensão de usuarios - Camada Silver"
